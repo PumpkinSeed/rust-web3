@@ -327,6 +327,7 @@ mod tests {
 
     #[tokio::test]
     async fn should_make_a_request() {
+
         use hyper::service::{make_service_fn, service_fn};
 
         // given

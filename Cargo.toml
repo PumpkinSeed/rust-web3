@@ -29,7 +29,11 @@ serde_json = "1.0.39"
 tiny-keccak = { version = "2.0.1", features = ["keccak"] }
 pin-project = "1.0"
 # Optional deps
+# TODO for testing purpose
+rouille = "3.0.0"
+ethock = "0.0.3"
 ## HTTP
+reqwest = { version = "0.11", features = ["json"] }
 base64 = { version = "0.13", optional = true }
 hyper = { version = "0.13", optional = true, default-features = false, features = ["stream", "tcp"] }
 hyper-tls = { version = "0.4", optional = true }

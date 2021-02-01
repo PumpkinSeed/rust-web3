@@ -7,7 +7,8 @@ use crate::{
         Address, Block, BlockHeader, BlockId, BlockNumber, Bytes, CallRequest, Filter, Index, Log, SyncState,
         Transaction, TransactionId, TransactionReceipt, TransactionRequest, Work, H256, H520, H64, U256, U64,
     },
-    Transport,
+    Transportv2,
+    error,
 };
 
 /// `Eth` namespace
@@ -16,23 +17,24 @@ pub struct Eth<T> {
     transport: T,
 }
 
-impl<T: Transport> Namespace<T> for Eth<T> {
-    fn new(transport: T) -> Self
-    where
-        Self: Sized,
-    {
-        Eth { transport }
-    }
+// @TODO
+// impl<T: Transport> Namespace<T> for Eth<T> {
+//     fn new(transport: T) -> Self
+//     where
+//         Self: Sized,
+//     {
+//         Eth { transport }
+//     }
+//
+//     fn transport(&self) -> &T {
+//         &self.transport
+//     }
+// }
 
-    fn transport(&self) -> &T {
-        &self.transport
-    }
-}
-
-impl<T: Transport> Eth<T> {
+impl<T: Transportv2> Eth<T> {
     /// Get list of available accounts.
-    pub fn accounts(&self) -> CallFuture<Vec<Address>, T::Out> {
-        CallFuture::new(self.transport.execute("eth_accounts", vec![]))
+    pub fn accounts(&self) -> error::Result<rpc::Value>{
+        self.transport.execute("eth_accounts", vec![])
     }
 
     /// Get current block number

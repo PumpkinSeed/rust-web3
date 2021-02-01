@@ -10,6 +10,8 @@ pub mod http;
 #[cfg(feature = "http")]
 pub use self::http::Http;
 
+pub mod httpv2;
+
 #[cfg(any(feature = "ws-tokio", feature = "ws-async-std"))]
 pub mod ws;
 #[cfg(any(feature = "ws-tokio", feature = "ws-async-std"))]
