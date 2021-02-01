@@ -48,22 +48,22 @@ pub trait Transportv2: std::fmt::Debug + Clone {
 // TODO [ToDr] The transport most likely don't need to be thread-safe.
 // (though it has to be Send)
 /// Transport implementation
-// pub trait Transport: std::fmt::Debug + Clone {
-//     /// The type of future this transport returns when a call is made.
-//     type Out: futures::Future<Output = error::Result<rpc::Value>>;
-//
-//     /// Prepare serializable RPC call for given method with parameters.
-//     fn prepare(&self, method: &str, params: Vec<rpc::Value>) -> (RequestId, rpc::Call);
-//
-//     /// Execute prepared RPC call.
-//     fn send(&self, id: RequestId, request: rpc::Call) -> Self::Out;
-//
-//     /// Execute remote method with given parameters.
-//     fn execute(&self, method: &str, params: Vec<rpc::Value>) -> Self::Out {
-//         let (id, request) = self.prepare(method, params);
-//         self.send(id, request)
-//     }
-// }
+pub trait Transport: std::fmt::Debug + Clone {
+    /// The type of future this transport returns when a call is made.
+    type Out: futures::Future<Output = error::Result<rpc::Value>>;
+
+    /// Prepare serializable RPC call for given method with parameters.
+    fn prepare(&self, method: &str, params: Vec<rpc::Value>) -> (RequestId, rpc::Call);
+
+    /// Execute prepared RPC call.
+    fn send(&self, id: RequestId, request: rpc::Call) -> Self::Out;
+
+    /// Execute remote method with given parameters.
+    fn execute(&self, method: &str, params: Vec<rpc::Value>) -> Self::Out {
+        let (id, request) = self.prepare(method, params);
+        self.send(id, request)
+    }
+}
 
 /// A transport implementation supporting batch requests.
 pub trait BatchTransport: Transport {

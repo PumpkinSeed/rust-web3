@@ -1,24 +1,26 @@
 // @TODO proxy support
-use crate::{error};
+use crate::{error, rpc};
+use std::collections::HashMap;
 
 #[derive(Debug, Clone)]
 pub struct Http {
     url: String,
-    client: reqwest::Client,
+    client: reqwest::blocking::Client,
 }
 
 impl Http {
     pub fn new(url: &str) -> error::Result<Self> {
         Ok(Http{
             url: String::from(url),
-            client: reqwest::Client::new(),
+            client: reqwest::blocking::Client::new(),
         })
     }
 
-    pub fn execute(&self, method: &str, params: Vec<rpc::Value>) {
-        let mut builder = self.client.request(reqwest::Method::POST, self.url.clone());
+    pub fn execute(&self, method: &str, params: Option<Vec<rpc::Value>>) {
+        let mut builder = self.client.request(reqwest::Method::POST, reqwest::Url::parse(&self.url.clone()[..]).unwrap());
         builder = builder.header(reqwest::header::CONTENT_TYPE, "application/json");
-        builder.send()
+        let resp = builder.send().unwrap().text().unwrap();
+        println!("{:?}", resp);
     }
 }
 
@@ -31,7 +33,7 @@ mod tests {
         let addr = "127.0.0.1:3001";
         ethock_lib::server::Entry::new(addr.clone()).serve_silent();
 
-        let http = Http::new(addr.clone()).unwrap();
-
+        let http = Http::new("http://127.0.0.1:3001").unwrap();
+        http.execute(ethock_lib::methods::ETH_ACCOUNTS, None)
     }
 }

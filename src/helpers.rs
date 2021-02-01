@@ -34,9 +34,9 @@ impl<T, F> CallFuture<T, F> {
 }
 
 impl<T, F> Future for CallFuture<T, F>
-where
-    T: serde::de::DeserializeOwned,
-    F: Future<Output = error::Result<rpc::Value>>,
+    where
+        T: serde::de::DeserializeOwned,
+        F: Future<Output = error::Result<rpc::Value>>,
 {
     type Output = error::Result<T>;
 
