@@ -16,11 +16,18 @@ impl Http {
         })
     }
 
-    pub fn execute(&self, method: &str, params: Option<Vec<rpc::Value>>) {
+    pub fn execute(&self, method: &str, params: rpc::Params) {
+        let body = rpc::MethodCall{
+            jsonrpc: Some(rpc::Version::V2),
+            method: method.to_string(),
+            params,
+            id: rpc::Id::Num(1),
+        };
         let mut builder = self.client.request(reqwest::Method::POST, reqwest::Url::parse(&self.url.clone()[..]).unwrap());
         builder = builder.header(reqwest::header::CONTENT_TYPE, "application/json");
+        builder = builder.json(&body);
         let resp = builder.send().unwrap().text().unwrap();
-        println!("{:?}", resp);
+        println!("response: {:?}", resp);
     }
 }
 
@@ -34,6 +41,6 @@ mod tests {
         ethock_lib::server::Entry::new(addr.clone()).serve_silent();
 
         let http = Http::new("http://127.0.0.1:3001").unwrap();
-        http.execute(ethock_lib::methods::ETH_ACCOUNTS, None)
+        http.execute(ethock_lib::methods::ETH_ACCOUNTS, rpc::Params::Array(vec![jsonrpc_core::Value::String("".to_string())]))
     }
 }
