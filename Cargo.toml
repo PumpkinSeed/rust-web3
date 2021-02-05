@@ -31,7 +31,7 @@ pin-project = "1.0"
 # Optional deps
 # TODO for testing purpose
 rouille = "3.0.0"
-ethock = "0.0.3"
+ethock = "0.1.0"
 ## HTTP
 reqwest = { version = "0.11", features = ["json", "blocking"] }
 base64 = { version = "0.13", optional = true }

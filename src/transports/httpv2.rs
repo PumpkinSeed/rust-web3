@@ -41,6 +41,6 @@ mod tests {
         ethock_lib::server::Entry::new(addr.clone()).serve_silent();
 
         let http = Http::new("http://127.0.0.1:3001").unwrap();
-        http.execute(ethock_lib::methods::ETH_ACCOUNTS, rpc::Params::Array(vec![jsonrpc_core::Value::String("".to_string())]))
+        http.execute(ethock_lib::methods::ETH_COMPILE_SOLIDITY, rpc::Params::Array(vec![jsonrpc_core::Value::String("".to_string())]))
     }
 }
